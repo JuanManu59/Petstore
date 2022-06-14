@@ -37,7 +37,9 @@
 							"    pm.expect(jsonRequest.category.name).to.eql(jsonResponse.category.name);\r",
 							"});\r",
 							"\r",
-							""
+							"pm.test(\"Verifica que el status code sea uno de los esperados\", function (){\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,405]);\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -92,6 +94,10 @@
 							"    pm.expect(pm.variables.get(\"pet_name\")).to.eql(jsonResponse.name);\r",
 							"});\r",
 							"\r",
+							"pm.test(\"Verifica que el status code sea uno de los esperados\", function (){\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,400,400]);\r",
+							"});\r",
+							"\r",
 							""
 						],
 						"type": "text/javascript"
@@ -133,7 +139,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"id\": {{order_id}},\r\n  \"petId\": {{pet_id}},\r\n  \"quantity\": {{quantity_order}},\r\n  \"shipDate\": \"{{shipDate_order}}\",\r\n  \"status\": \"{{status_order}}\",\r\n  \"complete\": {{complete_order}}\r\n}",
@@ -179,6 +191,9 @@
 							"    //pm.expect(pm.environment.get(\"complete_order\")).to.eql(jsonResponse.complete);\r",
 							"});\r",
 							"\r",
+							"pm.test(\"Verifica que el status code sea uno de los esperados\", function (){\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,400,400]);\r",
+							"});\r",
 							""
 						],
 						"type": "text/javascript"
