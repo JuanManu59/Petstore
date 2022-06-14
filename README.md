@@ -13,9 +13,9 @@ Hint: You will probably need to use environments to store some data that needs t
 Upload the solution to a repo, put in the README instructions about how to execute your code, share the solution as a response to this message :)
 
 
-##Steps
+## Steps
 
-###1. Configuración inicial
+### Configuración
 
 1. Crear una cuenta en Github si no la tiene.
 
@@ -40,4 +40,4 @@ Upload the solution to a repo, put in the README instructions about how to execu
     ```
 8. Una vez hecho esto verá en la consola de comandos los resultados de las pruebas automatiadas ejecutadas.
 
-###End
+### End
