@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "b68f23ff-b14b-4546-88da-898f9f7b3808",
+		"name": "PetstoreCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9411777"
+	},
+	"item": [
+		{
+			"name": "Add a new pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let PET_ID = Math.floor(Math.random()*100000);\r",
+							"pm.collectionVariables.set(\"pet_id\", PET_ID);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequest = JSON.parse(pm.request.body.raw);\r",
+							"let jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"El status code del response es 200\", function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verifica que se cree la mascota con los atributos indicados\", function (){\r",
+							"    pm.expect(jsonRequest.id).to.eql(jsonResponse.id);\r",
+							"    pm.expect(jsonRequest.name).to.eql(jsonResponse.name);\r",
+							"    pm.expect(jsonRequest.category.name).to.eql(jsonResponse.category.name);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{pet_id}},\r\n    \"category\": {\r\n        \"id\": 1,\r\n        \"name\": \"{{pet_category}}\"\r\n    },\r\n    \"name\": \"{{pet_name}}\",\r\n    \"photoUrls\": [],\r\n    \"tags\": [],\r\n    \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find pet by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"El status code del response es 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verifica que se obtenga la mascota esperada\", function () {\r",
+							"    pm.expect(pm.variables.get(\"pet_id\")).to.eql(jsonResponse.id);\r",
+							"    pm.expect(pm.variables.get(\"pet_name\")).to.eql(jsonResponse.name);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{pet_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place an order for the created Pet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let ORDER_ID = Math.floor(Math.random()*100000);\r",
+							"pm.collectionVariables.set(\"order_id\", ORDER_ID);\r",
+							"\r",
+							"const dateNow= new Date();\r",
+							"pm.environment.set('shipDate_order', dateNow.toISOString());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{order_id}},\r\n  \"petId\": {{pet_id}},\r\n  \"quantity\": {{quantity_order}},\r\n  \"shipDate\": \"{{shipDate_order}}\",\r\n  \"status\": \"{{status_order}}\",\r\n  \"complete\": {{complete_order}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/store/order",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"store",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find order by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"El status code del response es 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verifica que se obtenga la orden esperada\", function () {\r",
+							"    pm.expect(pm.variables.get(\"order_id\")).to.eql(jsonResponse.id);\r",
+							"    pm.expect(pm.variables.get(\"pet_id\")).to.eql(jsonResponse.petId);\r",
+							"    \r",
+							"    pm.expect(Number.parseFloat(pm.environment.get(\"quantity_order\"))).to.eql(jsonResponse.quantity);\r",
+							"    pm.expect(pm.environment.get(\"status_order\")).to.eql(jsonResponse.status);\r",
+							"    //pm.expect(pm.environment.get(\"complete_order\")).to.eql(jsonResponse.complete);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/store/order/{{order_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"store",
+						"order",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "pet_id",
+			"value": ""
+		},
+		{
+			"key": "order_id",
+			"value": ""
+		}
+	]
+}
