@@ -14,7 +14,13 @@
 					"script": {
 						"exec": [
 							"let PET_ID = Math.floor(Math.random()*100000);\r",
-							"pm.collectionVariables.set(\"pet_id\", PET_ID);"
+							"pm.collectionVariables.set(\"pet_id\", PET_ID);\r",
+							"\r",
+							"var name_random = pm.variables.replaceIn('{{$randomFullName}}');\r",
+							"pm.environment.set(\"pet_name\", name_random);\r",
+							"\r",
+							"var category_random = pm.variables.replaceIn('{{$randomColor}}');\r",
+							"pm.environment.set(\"pet_category\", category_random);"
 						],
 						"type": "text/javascript"
 					}
@@ -130,8 +136,15 @@
 							"let ORDER_ID = Math.floor(Math.random()*100000);\r",
 							"pm.collectionVariables.set(\"order_id\", ORDER_ID);\r",
 							"\r",
+							"var name_quantity = Math.floor(Math.random()*10);\r",
+							"pm.environment.set(\"quantity_order\", name_quantity);\r",
+							"\r",
 							"const dateNow= new Date();\r",
-							"pm.environment.set('shipDate_order', dateNow.toISOString());"
+							"pm.environment.set('shipDate_order', dateNow.toISOString());\r",
+							"\r",
+							"var complete_random = pm.variables.replaceIn('{{$randomBoolean}}');\r",
+							"pm.environment.set(\"complete_order\", complete_random);\r",
+							""
 						],
 						"type": "text/javascript"
 					}
